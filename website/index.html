@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontario Teacher Assistant Platform</title>
+    <style>
+        :root {
+            --ontario-green: #2E8540;
+            --classroom-blue: #3A6EA5;
+            --chalkboard-black: #1A2421;
+            --apple-red: #E74C3C;
+        }
+
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+                        url('classroom-bg.jpg') center/cover;
+            font-family: 'Helvetica Neue', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 2rem;
+            margin: auto;
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--chalkboard-black);
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: var(--classroom-blue);
+            margin: 1rem 0;
+        }
+
+        .signup-form input {
+            width: 80%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid var(--classroom-blue);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .signup-form button {
+            background: var(--ontario-green);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .signup-form button:hover {
+            background: var(--apple-red);
+        }
+
+        .countdown {
+            background: var(--ontario-green);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            font-size: 1.2rem;
+        }
+
+        .features {
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li::before {
+            content: '✅';
+            margin-right: 8px;
+        }
+
+        .edu-links img {
+            width: 150px;
+            margin: 1rem;
+        }
+    </style>
+    <script>
+        function updateCountdown() {
+            const launchDate = new Date("August 1, 2025 00:00:00").getTime();
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown-timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                document.getElementById("countdown-timer").innerHTML = "Now Available!";
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Simplify Your Classroom Management</h1>
+        <p class="lead">
+            One platform for attendance, class management, and student observations.
+            Say goodbye to juggling multiple apps!
+        </p>
+
+        <div class="signup-form">
+            <input type="email" placeholder="Enter your school board email">
+            <button>Join the Waitlist →</button>
+        </div>
+
+        <div class="countdown">
+            <h2>Launching for the 2025-2026 School Year!</h2>
+            <div id="countdown-timer">Loading...</div>
+        </div>
+
+        <div class="features">
+            <h2>Built for Ontario Educators:</h2>
+            <ul>
+                <li>One-click attendance tracking</li>
+                <li>Streamlined student observation logs</li>
+                <li>Integrated with Ontario school systems</li>
+            </ul>
+        </div>
+
+        <div class="edu-links">
+            <a href="https://www.otpp.com"><img src="assets/otpp.png" alt="Ontario Teachers Pension Plan"></a>
+            <a href="https://www.hellokoru.com/"><img src="assets/koru.svg" alt="Koru"></a>
+        </div>
+    </div>
+</body>
+</html>

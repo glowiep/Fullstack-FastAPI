@@ -56,7 +56,7 @@ class DevSettings(Settings):
     ENV_MODE: str = 'dev'
 
     # Database settings for development
-    DEV_DB_URL: str = "sqlite:///./dev.db"
+    DEV_DB_URL: str = "postgresql://roundhouse.proxy.rlwy.net:56604/railway?user=postgres&password=ocxGluERNifyKXQhsxJWpTZaWdpOEgCB"
 
     model_config = SettingsConfigDict(env_file=".env", extra='allow')
 

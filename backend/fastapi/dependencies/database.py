@@ -4,12 +4,16 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
 from backend.fastapi.core.init_settings import global_settings as settings
 
-# Base class for the database models
-Base = declarative_base()
+from sqlalchemy.ext.automap import automap_base
+
 
 # Synchronous engine and session
 sync_engine = create_engine(settings.DB_URL)
 SyncSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=sync_engine)
+
+# Automap base to reflect existing tables
+Base = automap_base()
+Base.prepare(sync_engine, reflect=True)  # Reflect the existing schema
 
 # Asynchronous engine and session
 async_engine = create_async_engine(settings.ASYNC_DB_URL, echo=False, future=True)

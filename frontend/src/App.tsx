@@ -17,7 +17,8 @@ function App() {
         </a>
       </div>
       <h1>OnClass</h1>
-      <h2>Streamlining observation process for teachers</h2>
+      <h2>Simplify Your Classroom Observations</h2>
+      <h3>One platform for attendance, class management, and student observations. Say goodbye to juggling multiple apps!</h3>
       <div className="card">
         <button className="login-button" onClick={() => navigate("/login")}>Login</button>
       </div>

@@ -8,7 +8,7 @@ const Login = () => {
         <form className="form">
           <p className="form-title">Sign in to your account</p>
           <div className="input-container">
-            <input placeholder="Enter email" type="email" />
+            <input placeholder="Enter email" type="email" value="docksideDreamers@gmail.com" />
             <span>
               <svg
                 stroke="currentColor"
@@ -26,7 +26,8 @@ const Login = () => {
             </span>
           </div>
           <div className="input-container">
-            <input placeholder="Enter password" type="password" />
+            {/* Let's pretend the password is prefilled */}
+            <input placeholder="Enter password" type="password" value="tesdfgdfgd" />
             <span>
               <svg
                 stroke="currentColor"
@@ -52,7 +53,7 @@ const Login = () => {
           <button className="submit" type="submit" onClick={() => navigate('/home')}>
             Sign in
           </button>
-          <p className="signup-link">
+          <p className="signup-link" onClick={() => navigate('/')}>
             No account? <a href="#">Sign up</a>
           </p>
           <p className="signup-link" onClick={() => navigate('/')}>

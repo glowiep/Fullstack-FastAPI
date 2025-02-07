@@ -19,6 +19,9 @@ This example starts up a [FastAPI](https://fastapi.tiangolo.com/) server with [P
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/IhHgYS?referralCode=jk_FgY)
 [![][deploy-on-zeabur-button-image]][deploy-on-zeabur-link]
 
+Overall Structure (Built with [GitDiagram](https://gitdiagram.com/glowiep/Fullstack-FastAPI))
+![Git Diagram](diagram.png)
+
 ## ✨ Features
 
 - FastAPI

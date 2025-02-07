@@ -1,10 +1,17 @@
+
+@import "tailwindcss"; /* iadded */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(12, 1, 1, 0.87);
   background-color: #242424b9;
 
   font-synthesis: none;
@@ -65,4 +72,21 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+
+.radial-progress {
+  @apply rounded-full;
+}
+
+.badge {
+  @apply px-3 py-1 rounded-full text-sm font-semibold;
+}
+
+.badge-success {
+  @apply bg-green-100 text-green-800;
+}
+
+.badge-warning {
+  @apply bg-yellow-100 text-yellow-800;
 }

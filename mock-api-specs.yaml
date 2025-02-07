@@ -1,0 +1,185 @@
+openapi: 3.0.3
+info:
+  title: OnClass
+  version: 1.0.0
+  description: API for recording and managing student observations in Ontario schools.
+
+servers:
+  - url: https://onclass.ca/api
+    description: Production server
+
+security:
+  - apiKeyAuth: []
+
+paths:
+  /observations:
+    post:
+      summary: Create a new observation
+      security:
+        - apiKeyAuth: []
+      tags:
+        - Observations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateObservation"
+      responses:
+        "201":
+          description: Observation created successfully.
+        "400":
+          description: Invalid input data.
+        "403":
+          description: Unauthorized access.
+
+  /observations/{observation_id}:
+    put:
+      summary: Update an existing observation
+      security:
+        - apiKeyAuth: []
+      tags:
+        - Observations
+      parameters:
+        - name: observation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateObservation"
+      responses:
+        "200":
+          description: Observation updated successfully.
+        "400":
+          description: Invalid input data.
+        "403":
+          description: Unauthorized access.
+        "404":
+          description: Observation not found.
+
+  /export/student:
+    post:
+      summary: Export student observation data (PDF or Email)
+      security:
+        - apiKeyAuth: []
+      tags:
+        - Export
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExportStudentRequest"
+      responses:
+        "200":
+          description: Export initiated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportResponse"
+        "400":
+          description: Invalid request.
+        "403":
+          description: Unauthorized access.
+        "404":
+          description: Student data not found.
+        "500":
+          description: Export service failure.
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    CreateObservation:
+      type: object
+      required:
+        - studentId
+        - teacherId
+        - categoryId
+        - observationText
+        - severity
+      properties:
+        studentId:
+          type: integer
+          description: Student's unique ID.
+        teacherId:
+          type: integer
+          description: Teacher's unique ID.
+        sectionId:
+          type: integer
+          description: Section/class ID.
+        categoryId:
+          type: integer
+          description: Observation category ID.
+        observationText:
+          type: string
+          description: Detailed observation text.
+        observationDate:
+          type: string
+          format: date-time
+          description: Date/time of the observation.
+        severity:
+          type: string
+          enum: [low, medium, high]
+          description: Severity level.
+        requiresFollowup:
+          type: boolean
+          description: Whether follow-up is required.
+        isPrivate:
+          type: boolean
+          description: Whether the observation is private.
+
+    UpdateObservation:
+      type: object
+      properties:
+        observationText:
+          type: string
+          description: Updated observation text.
+        severity:
+          type: string
+          enum: [low, medium, high]
+        requiresFollowup:
+          type: boolean
+        isPrivate:
+          type: boolean
+    
+    ExportStudentRequest:
+          type: object
+          required:
+            - studentId
+            - exportMethod
+          properties:
+            studentId:
+              type: integer
+              description: Student's unique ID.
+            exportMethod:
+              type: string
+              enum: [email, pdf]
+              description: Export method (email or PDF).
+            emailAddress:
+              type: string
+              format: email
+              description: Required if exportMethod is "email".
+    
+    ExportResponse:
+      type: object
+      properties:
+        exportMethod:
+          type: string
+          enum: [email, pdf]
+        downloadLink:
+          type: string
+          format: uri
+          description: Temporary download link (valid for 10 minutes). Only returned for PDF exports.
+        message:
+          type: string
+          description: Confirmation message (e.g., "Export email sent").

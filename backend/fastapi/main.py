@@ -6,9 +6,22 @@ from fastapi.staticfiles import StaticFiles
 from backend.fastapi.core.init_settings import args
 from backend.fastapi.core.middleware import setup_cors, setup_session, add_doc_protect
 from backend.fastapi.core.routers import setup_routers
+from fastapi.middleware.cors import CORSMiddleware
 
 # Initiate a FastAPI App.
 app = FastAPI()
+
+# Default to "http://localhost:3000" for development
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,  # Allow the React frontend's origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Frontend
 templates = Jinja2Templates(directory="frontend/login/templates")

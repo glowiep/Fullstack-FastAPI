@@ -48,7 +48,7 @@ class Settings(BaseSettings):
     @property
     def API_BASE_URL(self) -> str:
         if self.ENV_MODE == "dev":
-            return 'http://localhost:5000/'
+            return 'http://localhost:49152/'
         return self.HOST_URL
 
 class DevSettings(Settings):

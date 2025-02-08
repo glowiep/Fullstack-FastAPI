@@ -5,11 +5,10 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from backend.fastapi.core.init_settings import args
 from backend.fastapi.core.middleware import setup_cors, setup_session, add_doc_protect
-from backend.fastapi.core.lifespan import lifespan
 from backend.fastapi.core.routers import setup_routers
 
 # Initiate a FastAPI App.
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 # Frontend
 templates = Jinja2Templates(directory="frontend/login/templates")

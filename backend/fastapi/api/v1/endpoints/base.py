@@ -1,6 +1,9 @@
 import os
-from fastapi import APIRouter
+from fastapi import APIRouter,Depends
 from fastapi.responses import JSONResponse
+from sqlalchemy.orm import Session
+from backend.fastapi.dependencies.database import get_sync_db, Base
+
 
 router = APIRouter()
 

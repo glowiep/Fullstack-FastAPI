@@ -1,28 +1,30 @@
-import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+    const navigate = useNavigate();
 
     const sidebarItems = [
-        'Attendance',
-        'Behaviors',
-        'Courses',
-        'Grades',
-        'Observations',
-        'Reports',
-        'Students'
-      ];
+      { section: 'Attendance', url: '/attendance' },
+      { section: 'Behaviors', url: '/behaviors' },
+      { section: 'Courses', url: '/courses' },
+      { section: 'Grades', url: '/grades' },
+      { section: 'Observations', url: '/observations' },
+      { section: 'Reports', url: '/reports' },
+      { section: 'Students', url: '/students' }
+    ];
 
     return (
 
         <div className="flex min-h-screen">
             {/* Sidebar */}
             <div className="w-48 bg-red-700 text-white p-4">
-                {sidebarItems.map((item, index) => (
+                {sidebarItems.map((item, _) => (
                 <div 
-                    key={item} 
-                    className="py-3 text-lg font-semibold border-b border-red-600 last:border-b-0"
+                    key={item.section} 
+                    className="py-3 text-lg font-semibold border-b border-red-600 last:border-b-0 hover:cursor-pointer hover:bg-red-800"
+                    onClick={() => navigate(item.url)}
                 >
-                    {item}
+                    {item.section}
                 </div>
                 ))}
             </div>

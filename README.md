@@ -31,7 +31,7 @@ Overall Structure (Built with [GitDiagram](https://gitdiagram.com/glowiep/Fullst
 ## 💁‍♀️ How to use
 
 - Clone locally and install packages with pip using `pip install -r requirements.txt`
-- Run locally using `python -m backend.app.main`
+- Run locally using `python -m backend.app.main` or `python3 -m backend.fastapi.main`
 
 ## 📝 Notes
 

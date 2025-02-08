@@ -7,8 +7,8 @@ from backend.fastapi.core.init_settings import args
 from backend.fastapi.core.middleware import setup_cors, setup_session, add_doc_protect
 from backend.fastapi.core.routers import setup_routers
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.api.v1.endpoints.base import root_router
-from fastapi.api.v1.endpoints.classroom import router as classroom_router
+from backend.fastapi.api.v1.endpoints.base import router as root_router
+from backend.fastapi.api.v1.endpoints.classroom import router as classroom_router
 
 # Initiate a FastAPI App.
 app = FastAPI()

@@ -6,9 +6,9 @@ from backend.fastapi.dependencies.database import get_sync_db, Base
 from fastapi.responses import RedirectResponse
 
 
-router = APIRouter()
+root_router = APIRouter()
 
-@router.get("/")
+@root_router.get("/")
 def onboard_message():
     # Redirect to the React frontend's root URL
     return RedirectResponse(url=os.getenv("REACT_FRONTEND_URL", "http://localhost:3000"))

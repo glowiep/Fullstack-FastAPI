@@ -1,5 +1,6 @@
 import api from "../api/axios"
 import { useState } from "react"
+import Sidebar from "../components/Sidebar";
 
 // Use this as an example for fetching data from the backend
 
@@ -17,13 +18,19 @@ const ObservationsSection = () => {
         }
     };
     return (
-        <div>
-            <h1>Observations Section</h1>
+        <div className="flex w-screen h-screen">
+            <Sidebar />
+            <div className="flex flex-col bg-gray-100 w-full">
+                <h1>Observations Section</h1>
 
-            <button onClick={handleGetObservations}>Example</button>
-            {observations.map((observation, index) => (
-                <div key={index}>{observation}</div>
-            ))}
+                <div>
+                    <button onClick={handleGetObservations}>Example</button>
+                    {observations.map((observation, index) => (
+                        <div key={index}>{observation}</div>
+                    ))}
+                </div>
+
+            </div>
         </div>
     );
 };

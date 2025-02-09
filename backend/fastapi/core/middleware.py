@@ -9,7 +9,7 @@ def setup_cors(app):
     origins = [
         global_settings.API_BASE_URL,
         "http://localhost",
-        "http://localhost:5000",
+        "http://localhost:49152",
     ]
 
     # Add CORS middleware

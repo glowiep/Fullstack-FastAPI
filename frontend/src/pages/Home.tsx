@@ -1,37 +1,39 @@
-import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+    const navigate = useNavigate();
 
     const sidebarItems = [
-        'Attendance',
-        'Behaviors',
-        'Courses',
-        'Grades',
-        'Observations',
-        'Reports',
-        'Students'
-      ];
+      { section: 'Observations', url: '/observations' },
+      { section: 'Behaviors', url: '/behaviors' },
+      { section: 'Reports', url: '/reports' },
+      { section: 'Students', url: '/students' },
+      { section: 'Courses', url: '/courses' },
+      { section: 'Grades', url: '/grades' },
+      { section: 'Attendance', url: '/attendance' },
+    ];
 
     return (
 
-        <div className="flex min-h-screen">
+        <div className="flex w-screen h-screen">
             {/* Sidebar */}
             <div className="w-48 bg-red-700 text-white p-4">
-                {sidebarItems.map((item, index) => (
+                {sidebarItems.map((item, _) => (
                 <div 
-                    key={item} 
-                    className="py-3 text-lg font-semibold border-b border-red-600 last:border-b-0"
+                    key={item.section} 
+                    className="py-3 text-lg font-semibold border-b border-red-600 last:border-b-0 hover:cursor-pointer hover:bg-red-800"
+                    onClick={() => navigate(item.url)}
                 >
-                    {item}
+                    {item.section}
                 </div>
                 ))}
             </div>
 
 
 
-            <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Grade 6 Mathematics Student Tracking</h1>
+            <div className="flex bg-gray-100 w-full">
+      <div className="mx-auto flex flex-col p-8">
+        <h1 className="text-3xl font-bold mb-8">Grade 6 Mathematics Student Tracking</h1>
         
         <div className="grid grid-cols-3 gap-6">
           {/* Overall Status */}

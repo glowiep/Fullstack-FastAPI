@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="flex flex-row justify-center">
         <a href="https://www.hellokoru.com/" target="_blank">
           <img src={koruLogo} className="logo" alt="Koru logo" />
         </a>

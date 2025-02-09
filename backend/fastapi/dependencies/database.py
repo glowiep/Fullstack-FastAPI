@@ -2,7 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
-from backend.fastapi.core.init_settings import global_settings as settings
+from backend.fastapi.core.init_settings import settings
+
 
 # Base class for the database models
 Base = declarative_base()

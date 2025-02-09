@@ -2,14 +2,16 @@ from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.responses import RedirectResponse
-from backend.fastapi.core.init_settings import global_settings
+from backend.fastapi.core.init_settings import settings
+
 
 def setup_cors(app):
     # Define the allowed origins
     origins = [
-        global_settings.API_BASE_URL,
+        settings.API_BASE_URL,
         "http://localhost",
         "http://localhost:5000",
+        "http://localhost:3000",
     ]
 
     # Add CORS middleware

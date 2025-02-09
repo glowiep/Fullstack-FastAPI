@@ -164,3 +164,6 @@ pip-selfcheck.json
 /tmp
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+# Ignore node_modules
+frontend/node_modules/

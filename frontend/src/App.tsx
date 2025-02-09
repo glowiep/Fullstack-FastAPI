@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="flex flex-row justify-center">
         <a href="https://www.hellokoru.com/" target="_blank">
           <img src={koruLogo} className="logo" alt="Koru logo" />
         </a>
@@ -20,7 +20,7 @@ function App() {
       <h2>Simplify Your Classroom Observations</h2>
       <h3>One platform for attendance, class management, and student observations. Say goodbye to juggling multiple apps!</h3>
       <div className="card">
-        <button className="login-button" onClick={() => navigate("/login")}>Login</button>
+        <button className="login-button" onClick={() => navigate("/login")}>Log In</button>
       </div>
       
       <Outlet />

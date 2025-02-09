@@ -6,8 +6,8 @@ import { toast, ToastContainer } from 'react-toastify';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('john@gmail.com');
+    const [password, setPassword] = useState('admin');
 
     interface LoginData {
       username: string;
@@ -99,12 +99,12 @@ const Login = () => {
           <button className="submit" type="submit">
             Sign in
           </button>
-          <p className="signup-link" onClick={() => navigate('/')}>
+          {/* <p className="signup-link" onClick={() => navigate('/')}>
             No account? <a href="#">Sign up</a>
-          </p>
+          </p> */}
           <p className="signup-link" onClick={() => navigate('/')}>
             {/* Redirect to /home */}
-            <a href="#">Back</a>
+            <a href="#">Maybe later</a>
           </p>
         </form>
         <ToastContainer />

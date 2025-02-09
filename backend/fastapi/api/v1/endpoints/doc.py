@@ -27,7 +27,7 @@ async def login(request: Request, payload: LoginPayload, db: Session = Depends(g
         request.session['teacher_id'] = user.teacher_id
         
         # Redirect to the home page
-        return RedirectResponse(url="/home-room", status_code=303)
+        return RedirectResponse(url="/home", status_code=200)
     else:
         # Return a JSON response for invalid credentials
         raise HTTPException(status_code=401, detail="Invalid credentials")

@@ -7,6 +7,8 @@ Teacher = Base.classes.teachers
 Observation = Base.classes.observations
 Student = Base.classes.students
 Course = Base.classes.courses
+StudentsCourses = Base.classes.student_courses
+ObservationMetric = Base.classes.observation_metrics
 
 
 
@@ -41,7 +43,33 @@ async def home_room(
         "status": "success"
     }
 
+# Gets all students based on course that the Teacher is designated to
+@router.get("/{course_id}/students")
+async def get_students_by_course(
+    course_id: int,
+    teacher_id: int = Depends(get_current_user),  
+    db: Session = Depends(get_sync_db)
+):
+    # Check if course exists and is taught by the authenticated teacher
+    course = db.query(Course).filter(Course.course_id == course_id, Course.teacher_id == teacher_id).first()
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found or not taught by you")
 
+    # Get all students in the course via the students_courses association table
+    students = (
+        db.query(Student)
+        .join(StudentsCourses, Student.student_id == StudentsCourses.student_id)
+        .filter(StudentsCourses.course_id == course_id)
+        .all()
+    )
+
+    # if not students:
+    #     raise HTTPException(status_code=404, detail="No students found for this course")
+
+    # Format response as JSON
+    students_list = [{"student_id": s.student_id, "name": s.name, "email": s.email} for s in students]
+
+    return {"course_id": course_id, "students": students_list}
 
 # Gets all observations corresponding to the teacher logged in
 @router.get("/observations/")

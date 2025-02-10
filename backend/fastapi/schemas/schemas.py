@@ -15,7 +15,7 @@ class TeacherSchema(TeacherCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Course schemas
 class CourseCreate(BaseModel):
@@ -31,7 +31,7 @@ class CourseSchema(CourseCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Student schemas
 class StudentCreate(BaseModel):
@@ -45,7 +45,7 @@ class StudentSchema(StudentCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Student Course schemas
 class StudentCourseCreate(BaseModel):
@@ -56,7 +56,7 @@ class StudentCourseSchema(StudentCourseCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Student Report schemas
 class StudentReportCreate(BaseModel):
@@ -69,7 +69,7 @@ class StudentReportSchema(StudentReportCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Report Entry schemas
 class ReportEntryCreate(BaseModel):
@@ -84,7 +84,7 @@ class ReportEntrySchema(ReportEntryCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Observation Metric schemas
 class ObservationMetricCreate(BaseModel):
@@ -97,7 +97,7 @@ class ObservationMetricSchema(ObservationMetricCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Observation schemas
 class ObservationCreate(BaseModel):
@@ -112,7 +112,7 @@ class ObservationSchema(ObservationCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Observation Attachment schemas
 class ObservationAttachmentCreate(BaseModel):
@@ -126,7 +126,7 @@ class ObservationAttachmentSchema(ObservationAttachmentCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Response schemas for relationships
 class TeacherWithCourses(TeacherSchema):
@@ -157,4 +157,4 @@ class ObservationUpdate(BaseModel):
     observation_text: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

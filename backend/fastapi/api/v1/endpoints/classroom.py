@@ -146,3 +146,58 @@ async def update_observation(
 
     return {"message": "Observation updated successfully", "observation_id": observation.observation_id}
 
+
+@router.post("/courses/{course_id}/observations/")
+async def create_observation(
+    course_id: int,
+    observation_data: ObservationCreate,  # Use schema for payload validation
+    teacher_id: int = Depends(get_current_user),  # Get the logged-in teacher's ID
+    db: Session = Depends(get_sync_db)
+):
+    # Check if the course exists and belongs to the logged-in teacher
+    course = db.query(Course).filter(Course.course_id == course_id, Course.teacher_id == teacher_id).first()
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found or you don't teach this course")
+
+    # Check if the observation metric exists for the course
+    metric = db.query(ObservationMetric).filter(ObservationMetric.metric_id == observation_data.metric_id, ObservationMetric.course_id == course_id).first()
+    if not metric:
+        raise HTTPException(status_code=404, detail="Metric not found for this course")
+
+    # Check if the student exists and is enrolled in the course
+    student = db.query(Student).filter(Student.student_id == observation_data.student_id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    # Check if the student is enrolled in the given course
+    student_course = db.query(StudentsCourses).filter(
+        StudentsCourses.student_id == observation_data.student_id,
+        StudentsCourses.course_id == course_id
+    ).first()
+
+    if not student_course:
+        raise HTTPException(status_code=404, detail="Student is not enrolled in this course")
+
+    # Create the observation
+    new_observation = Observation(
+        teacher_id=teacher_id,
+        course_id=course_id,
+        student_id=observation_data.student_id,
+        metric_id=observation_data.metric_id,
+        observation_text=observation_data.observation_text
+    )
+
+    db.add(new_observation)
+    db.commit()
+    db.refresh(new_observation)
+
+    return {
+        "message": "Observation created successfully",
+        "observation": {
+            "observation_id": new_observation.observation_id,
+            "metric_id": new_observation.metric_id,
+            "student_id": new_observation.student_id,
+            "observation_text": new_observation.observation_text,
+            "course_id": new_observation.course_id
+        }
+    }

@@ -3,6 +3,7 @@ import cohere
 from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.fastapi.dependencies.database import get_sync_db, Base
+from backend.fastapi.schemas.schemas import ObservationMetricCreate
 
 Teacher = Base.classes.teachers  
 Observation = Base.classes.observations
@@ -45,11 +46,11 @@ def generate_metric_description(metric_name: str) -> str:
 @router.post("/{course_id}/metric/")
 async def add_observation_metric(
     course_id: int,
-    metric_data: dict,
+    metric_data: ObservationMetricCreate,  # Use schema to validate payload
     teacher_id: int = Depends(get_current_user),  
     db: Session = Depends(get_sync_db)
 ):
-    metric_name = metric_data.get("metric_name")
+    metric_name = metric_data.metric_name
     if not metric_name:
         raise HTTPException(status_code=400, detail="Metric name is required")
 
@@ -58,7 +59,7 @@ async def add_observation_metric(
     if not course:
         raise HTTPException(status_code=404, detail="Course not found or not taught by you")
 
-    # Check if metric already exists
+    # Check if metric already exists for the course
     existing_metric = db.query(ObservationMetric).filter(
         ObservationMetric.course_id == course_id,
         ObservationMetric.metric_name == metric_name
@@ -70,7 +71,7 @@ async def add_observation_metric(
     # Generate description using Cohere AI
     metric_description = generate_metric_description(metric_name)
 
-    # Create new metric record
+    # Create a new observation metric record
     new_metric = ObservationMetric(
         course_id=course_id,
         metric_name=metric_name,

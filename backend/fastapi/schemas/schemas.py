@@ -88,9 +88,9 @@ class ReportEntrySchema(ReportEntryCreate):
 
 # Observation Metric schemas
 class ObservationMetricCreate(BaseModel):
-    course_id: int
+    #course_id: int
     metric_name: str
-    description: Optional[str]
+    #description: Optional[str]
 
 class ObservationMetricSchema(ObservationMetricCreate):
     metric_id: int

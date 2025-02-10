@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import cohere
 from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -9,7 +10,7 @@ from backend.fastapi.api.v1.endpoints.classroom import get_current_user
 from decimal import Decimal
 
 
-Teacher = Base.classes.teachers  
+Teacher = Base.classes.teachers
 Observation = Base.classes.observations
 Student = Base.classes.students
 Course = Base.classes.courses
@@ -43,7 +44,7 @@ def generate_metric_description(metric_name: str) -> str:
 async def add_observation_metric(
     course_id: int,
     metric_data: ObservationMetricCreate,  # Use schema to validate payload
-    teacher_id: int = Depends(get_current_user),  
+    teacher_id: int = Depends(get_current_user),
     db: Session = Depends(get_sync_db)
 ):
     metric_name = metric_data.metric_name
@@ -60,7 +61,7 @@ async def add_observation_metric(
         ObservationMetric.course_id == course_id,
         ObservationMetric.metric_name == metric_name
     ).first()
-    
+
     if existing_metric:
         raise HTTPException(status_code=400, detail="Metric already exists for this course")
 
@@ -97,7 +98,7 @@ def generate_summary_report(observations: list) -> dict:
     """
     observation_texts = [obs.observation_text for obs in observations]
     combined_text = "\n\n".join(observation_texts)
-    
+
     try:
         # Request Cohere AI to generate both a summary and an estimated mark
         response = co.chat(
@@ -108,7 +109,7 @@ def generate_summary_report(observations: list) -> dict:
             temperature=0.7
         )
         result = response.text.strip()
-        
+
         # Extracting the mark from the response (assuming it's formatted at the end of the summary)
         estimated_mark = None
         if result:
@@ -140,7 +141,7 @@ async def generate_reports(
 ):
     # Step 1: Fetch all students and their courses
     students = db.query(Student).all()
-    
+
     if not students:
         raise HTTPException(status_code=404, detail="No students found")
 
@@ -151,7 +152,7 @@ async def generate_reports(
         db.add(student_report)
         db.commit()
         db.refresh(student_report)
-        
+
         # Step 3: Fetch all observations for the student across all courses
         observations = db.query(Observation).filter(Observation.student_id == student.student_id).all()
 
@@ -167,7 +168,7 @@ async def generate_reports(
 
             if course_id not in grouped_observations:
                 grouped_observations[course_id] = {}
-            
+
             if metric_id not in grouped_observations[course_id]:
                 grouped_observations[course_id][metric_id] = []
 
@@ -178,7 +179,7 @@ async def generate_reports(
             course = db.query(Course).filter(Course.course_id == course_id).first()
             if not course:
                 continue  # Skip if course not found
-            
+
             for metric_id, observations in metrics.items():
                 metric = db.query(ObservationMetric).filter(ObservationMetric.metric_id == metric_id).first()
                 if not metric:

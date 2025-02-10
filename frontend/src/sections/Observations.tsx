@@ -1,6 +1,7 @@
 import api from "../api/axios"
 import { useState } from "react"
 import Sidebar from "../components/Sidebar";
+import RecordTranscribe from "../components/RecordTransribe";
 
 // Use this as an example for fetching data from the backend
 
@@ -23,6 +24,9 @@ const ObservationsSection = () => {
             <div className="flex flex-col bg-gray-100 w-full">
                 <h1>Observations Section</h1>
 
+               <RecordTranscribe />
+
+                {/* Example */}
                 <div>
                     <button onClick={handleGetObservations}>Example</button>
                     {observations.map((observation, index) => (

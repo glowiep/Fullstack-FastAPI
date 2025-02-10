@@ -20,6 +20,7 @@ ReportEntry = Base.classes.report_entries
 StudentReport = Base.classes.student_reports
 
 router = APIRouter()
+load_dotenv() 
 
 # Initialize Cohere client
 api_key = os.getenv("COHERE_API_KEY")

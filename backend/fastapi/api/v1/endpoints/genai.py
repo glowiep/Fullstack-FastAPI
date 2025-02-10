@@ -1,3 +1,4 @@
+import os
 import cohere
 from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -23,7 +24,8 @@ def get_current_user(request: Request):
     return teacher_id  # Return the teacher_id
 
 # Initialize Cohere client
-co = cohere.Client(api_key="HdROvXmf76MUENqHZLCymsuF4WVGsLeE4eYCODL1")  # Set your API key in environment variables
+api_key = os.getenv("COHERE_API_KEY")
+co = cohere.Client(api_key)  # Set your API key in environment variables
 
 def generate_metric_description(metric_name: str) -> str:
     """

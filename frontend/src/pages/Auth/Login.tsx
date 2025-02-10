@@ -1,14 +1,57 @@
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import api from '../../api/axios';
+import { toast, ToastContainer } from 'react-toastify';
+
 const Login = () => {
     const navigate = useNavigate();
+    const [username, setUsername] = useState('john@gmail.com');
+    const [password, setPassword] = useState('admin');
+
+    interface LoginData {
+      username: string;
+      password: string;
+    }
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+      event.preventDefault();
+
+      // Create the data to be sent to the server
+      const loginData: LoginData = {
+        username,
+        password
+      };
+
+      try {
+        // Send POST request to the /login endpoint
+        const response = await api.post('/login', loginData);
+  
+        // Check if login was successful
+        if (response.status === 200) {
+          // Redirect to /home if login is successful
+          navigate('/home');
+        } else {
+          // Handle login error (invalid credentials)
+          toast.error('Invalid email or password');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        toast.error('There was an error logging in. Please try again later.');
+      }
+    };
+
     return (
       <div className="container">
         {/* From Uiverse.io by Yaya12085 */}
-        <form className="form">
+        <form className="form" onSubmit={(e) => handleSubmit(e)}>
           <p className="form-title">Sign in to your account</p>
           <div className="input-container">
-            <input placeholder="Enter email" type="email" value="docksideDreamers@gmail.com" />
+            <input placeholder="Enter email" 
+              type="email" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <span>
               <svg
                 stroke="currentColor"
@@ -27,7 +70,10 @@ const Login = () => {
           </div>
           <div className="input-container">
             {/* Let's pretend the password is prefilled */}
-            <input placeholder="Enter password" type="password" value="tesdfgdfgd" />
+            <input placeholder="Enter password" type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <span>
               <svg
                 stroke="currentColor"
@@ -50,17 +96,18 @@ const Login = () => {
               </svg>
             </span>
           </div>
-          <button className="submit" type="submit" onClick={() => navigate('/home')}>
+          <button className="submit" type="submit">
             Sign in
           </button>
-          <p className="signup-link" onClick={() => navigate('/')}>
+          {/* <p className="signup-link" onClick={() => navigate('/')}>
             No account? <a href="#">Sign up</a>
-          </p>
+          </p> */}
           <p className="signup-link" onClick={() => navigate('/')}>
             {/* Redirect to /home */}
-            <a href="#">Back</a>
+            <a href="#">Maybe later</a>
           </p>
         </form>
+        <ToastContainer />
       </div>
     );
   };

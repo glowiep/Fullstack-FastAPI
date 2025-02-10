@@ -3,10 +3,12 @@ from fastapi import APIRouter,Depends
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from backend.fastapi.dependencies.database import get_sync_db, Base
+from fastapi.responses import RedirectResponse
 
 
 router = APIRouter()
 
 @router.get("/")
 def onboard_message():
-    return {"message": "You've been onboarded!"}
+    # Redirect to the React frontend's root URL
+    return RedirectResponse(url=os.getenv("REACT_FRONTEND_URL", "http://localhost:3000"))

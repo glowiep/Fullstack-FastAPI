@@ -3,7 +3,7 @@ import cohere
 from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.fastapi.dependencies.database import get_sync_db, Base
-from backend.fastapi.schemas.schemas import ObservationMetricCreate
+from backend.fastapi.schemas.schemas import ObservationMetricCreate, CourseCreateMetricSchema
 from backend.fastapi.schemas.schemas import ReportEntrySchema
 from backend.fastapi.api.v1.endpoints.classroom import get_current_user
 from decimal import Decimal
@@ -47,6 +47,8 @@ async def add_observation_metric(
     db: Session = Depends(get_sync_db)
 ):
     metric_name = metric_data.metric_name
+    metric_description = metric_data.description  # Get the user-provided description
+
     if not metric_name:
         raise HTTPException(status_code=400, detail="Metric name is required")
 
@@ -64,8 +66,9 @@ async def add_observation_metric(
     if existing_metric:
         raise HTTPException(status_code=400, detail="Metric already exists for this course")
 
-    # Generate description using Cohere AI
-    metric_description = generate_metric_description(metric_name)
+    # If no description provided, generate one using Cohere AI
+    if not metric_description:
+        metric_description = generate_metric_description(metric_name)
 
     # Create a new observation metric record
     new_metric = ObservationMetric(
@@ -87,6 +90,7 @@ async def add_observation_metric(
             "course_id": new_metric.course_id
         }
     }
+
 
 
 
@@ -215,3 +219,66 @@ async def generate_reports(
                     return ReportEntrySchema.model_validate(new_report_entry)
 
     return {"message": "Reports generated and saved successfully"}
+
+@router.post("/recommend_metrics/")
+async def recommend_observation_metrics(
+    course: CourseCreateMetricSchema,
+    db: Session = Depends(get_sync_db),
+    teacher_id: int = Depends(get_current_user)
+):
+    """
+    Recommends observation metrics based on the course name, description, and grade level.
+    Uses Cohere AI to generate both metric names and descriptions.
+    """
+
+    # Extract request data
+    course_name = course.course_name
+    description = course.description
+    grade_level = course.grade_level
+
+    if not course_name or not description or not grade_level:
+        raise HTTPException(status_code=400, detail="Missing course_name, description, or grade_level")
+
+    try:
+        # Improved Cohere AI Prompt
+        response = co.chat(
+            model="command-r",
+            message=(
+                f"I am a teacher designing a curriculum for {course_name} (Grade {grade_level}).\n"
+                f"Course Description: {description}\n"
+                f"Suggest 5 relevant observation metrics to evaluate student performance. "
+                f"For each metric, provide a name and a short description.\n"
+                f"FORMAT the response strictly as follows:\n"
+                f"Metric Name: [Name]\n"
+                f"Description: [Short Description]\n\n"
+                f"(Repeat this format for 5 metrics)"
+            ),
+            temperature=0.7
+        )
+
+        # Extract response and parse into structured data
+        response_text = response.text.strip()
+        lines = response_text.split("\n")
+
+        recommended_metrics = []
+        metric_descriptions = []
+
+        # Process each line and extract structured data
+        for i in range(0, len(lines) - 1, 2):  # Iterate in pairs (name, description)
+            if lines[i].startswith("Metric Name:") and lines[i + 1].startswith("Description:"):
+                metric_name = lines[i].replace("Metric Name:", "").strip()
+                description = lines[i + 1].replace("Description:", "").strip()
+
+                recommended_metrics.append(metric_name)
+                metric_descriptions.append(description)
+
+        return {
+            "course_name": course_name,
+            "recommended_metrics": recommended_metrics[:5],  # Ensuring 5 metrics max
+            "metric_descriptions": metric_descriptions[:5]
+        }
+
+    except Exception as e:
+        print(f"Cohere API error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate observation metrics")
+

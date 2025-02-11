@@ -33,6 +33,11 @@ class CourseSchema(CourseCreate):
     class Config:
         from_attributes = True
 
+class CourseCreateMetricSchema(BaseModel):
+    course_name: str
+    description: str
+    grade_level: int  
+
 # Student schemas
 class StudentCreate(BaseModel):
     first_name: str
@@ -90,7 +95,7 @@ class ReportEntrySchema(ReportEntryCreate):
 class ObservationMetricCreate(BaseModel):
     #course_id: int
     metric_name: str
-    #description: Optional[str]
+    description: Optional[str]
 
 class ObservationMetricSchema(ObservationMetricCreate):
     metric_id: int

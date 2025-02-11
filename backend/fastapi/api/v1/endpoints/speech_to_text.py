@@ -26,6 +26,7 @@ async def upload_audio(file: UploadFile = File(...)):
     with tempfile.NamedTemporaryFile(delete=True, suffix=".wav") as temp_audio:
         shutil.copyfileobj(file.file, temp_audio)
         temp_audio.flush()  # Ensure all data is written before processing
+        temp_audio.seek(0)  # Move cursor to the beginning of the file
 
         # Convert Speech to Text
         transcript = speech_recognizer(temp_audio.name)["text"]

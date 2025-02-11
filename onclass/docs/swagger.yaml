@@ -1,0 +1,157 @@
+basePath: /api/v1
+definitions:
+  models.Class:
+    properties:
+      created_at:
+        example: "2025-02-11T12:00:00Z"
+        type: string
+      id:
+        type: integer
+      name:
+        example: Math 101
+        type: string
+      teacher_id:
+        example: 1
+        type: integer
+    type: object
+  models.CreateClassResponse:
+    properties:
+      class:
+        $ref: '#/definitions/models.Class'
+      message:
+        type: string
+    type: object
+  models.DeleteClassResponse:
+    properties:
+      class_id:
+        type: integer
+      message:
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for managing school classes and students
+  title: OnClass API
+  version: "1.0"
+paths:
+  /classes:
+    post:
+      consumes:
+      - application/json
+      description: Allows a teacher to create a new class with a name and teacher
+        ID
+      parameters:
+      - description: Class data
+        in: body
+        name: class
+        required: true
+        schema:
+          $ref: '#/definitions/models.Class'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CreateClassResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new class
+      tags:
+      - classes
+  /classes/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a class by ID
+      parameters:
+      - description: Class ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeleteClassResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete a class
+      tags:
+      - classes
+    get:
+      consumes:
+      - application/json
+      description: Retrieves class details by ID
+      parameters:
+      - description: Class ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Class'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get class details
+      tags:
+      - classes
+    put:
+      consumes:
+      - application/json
+      description: Updates class name or teacher ID
+      parameters:
+      - description: Class ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated class data
+        in: body
+        name: class
+        required: true
+        schema:
+          $ref: '#/definitions/models.Class'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CreateClassResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update a class
+      tags:
+      - classes
+swagger: "2.0"

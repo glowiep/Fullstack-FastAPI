@@ -1,5 +1,8 @@
 import '../App.css';
 import Sidebar from "../components/Sidebar";
+import Obseravtionbar from "../components/Observationbar";
+import Studentspie from '../components/Studentspie';
+import Actionlist from '../components/Actionlist'
 
 const Home = () => {
 
@@ -71,23 +74,27 @@ const Home = () => {
                 <div className="bg-white shadow rounded-lg p-4 col-span-1">
                   <h2 className="text-xl font-semibold mb-4">Observations</h2>
                   <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    Observations Chart
+                  <Obseravtionbar/>
                   </div>
                 </div>
 
                 <div className="bg-white shadow rounded-lg p-4 col-span-1">
                   <h2 className="text-xl font-semibold mb-4">All Students</h2>
                   <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    Students Chart
+                  <Studentspie/>
+                    
                   </div>
                 </div>
 
                 <div className="bg-white shadow rounded-lg p-4 col-span-1">
-                  <h2 className="text-xl font-semibold mb-4">Action Required</h2>
-                  <ul className="list-disc pl-5">
+                  {/* <h2 className="text-xl font-semibold mb-4">Action Required</h2> */}
+                  <Actionlist/>
+                  {/* <ul className="text-xl list-disc pl-5">
                     <li>Attendance Follow-up</li>
                     <li>Report Submissions</li>
-                  </ul>
+                    <li>Feedback Collection</li>
+                    <li>Performance Reviews</li>
+                  </ul> */}
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import api from "../api/axios"
 import { useState } from "react"
 import Sidebar from "../components/Sidebar";
-import RecordTranscribe from "../components/RecordTransribe";
+import RecordTranscribe from "../components/RecordTranscribe";
 
 // Use this as an example for fetching data from the backend
 

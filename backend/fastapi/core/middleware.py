@@ -28,9 +28,9 @@ def setup_session(app):
                        max_age=1800)  # 1800 seconds = 30 minutes
 
 async def doc_protect_middleware(request: Request, call_next):
-    if request.url.path in ["/docs", "/redoc", "/openapi.json"]:
-        if not request.session.get('authenticated'):
-            return RedirectResponse(url="/login")
+    # if request.url.path in ["/docs", "/redoc", "/openapi.json"]:
+    #     if not request.session.get('authenticated'):
+    #         return RedirectResponse(url="/login")
     response = await call_next(request)
     return response
 

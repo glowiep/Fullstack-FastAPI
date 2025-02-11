@@ -31,6 +31,7 @@ Overall Structure (Built with [GitDiagram](https://gitdiagram.com/glowiep/Fullst
 ## 💁‍♀️ How to use
 
 - Clone locally and install packages with pip using `pip install -r requirements.txt`
+- Update the .env file to include `COHERE_API_KEY = "<Cohere API key>"`. You can get a key from the [Cohere dashboard](https://dashboard.cohere.com/api-keys).
 - Run locally using `python -m backend.app.main` or `python3 -m backend.fastapi.main`
 
 ## 📝 Notes

@@ -16,7 +16,7 @@ const StudentsSection = () => {
             setSampleStudents([...sampleStudentsC]);
         }
 
-    }, [sampleStudents]);
+    }, [selectedClass]);
 
     return (
         <div className="flex w-screen h-screen">

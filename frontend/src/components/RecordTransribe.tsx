@@ -8,26 +8,26 @@ import { MdOutlineStart } from "react-icons/md";
 import { FaRegStopCircle } from "react-icons/fa";
 
 const RecordTranscribe = () => {
-    // # State to store audio data and results
+    // # Stating to store audio data and results
     const [transcription, setTranscription] = useState<string | null>(null);
     const [sentiment, setSentiment] = useState<string | null>(null);
     const [summary, setSummary] = useState<string | null>(null);
     const [namedEntities, setNamedEntities] = useState<string[]>([]);
 
-    // # Use `react-use-audio-recorder` for recording
+    // # Using `react-use-audio-recorder` for recording
     const {
-        recordingStatus,   // # Status: "idle", "recording", "paused", "stopped"
-        recordingTime,     // # Duration of the recording in seconds
-        startRecording,    // # Function to start recording
-        stopRecording,     // # Function to stop recording
-        pauseRecording,    // # Function to pause recording
-        resumeRecording,   // # Function to resume recording
-        getBlob            // # Function to get recorded audio blob
+        recordingStatus,  
+        recordingTime,    
+        startRecording,   
+        stopRecording,    
+        pauseRecording,   
+        resumeRecording,  
+        getBlob           
     } = useAudioRecorder();
 
-    // # Upload recorded audio to backend
+    // # Uploading recorded audio to backend
     const uploadAudio = async () => {
-        const audioBlob = getBlob();  // # Get audio data from recorder
+        const audioBlob = getBlob();  // # it Gets audio data from recorder
         if (!audioBlob) {
             alert("No audio recorded!");
             return;
@@ -48,57 +48,135 @@ const RecordTranscribe = () => {
     };
 
     return (
-        <div className="mb-10">
-            <h2>Record and Transcribe Audio</h2>
+        <div style={{ padding: "20px", backgroundColor: "#f8f9fa", borderRadius: "8px", boxShadow: "0px 4px 8px rgba(0,0,0,0.1)" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "10px" }}>Record and Transcribe Audio</h2>
+            <p style={{ marginBottom: "15px" }}>{`Recording Status: ${recordingStatus || "Not started"} | Time: ${recordingTime}s`}</p>
 
-            <p>{`Recording Status: ${recordingStatus} | Time: ${recordingTime}s`}</p>  {/* # Show recording status & time */}
-
-            <div className="flex flex-row items-center justify-center gap-4">
-                <button 
-                    disabled={recordingStatus === "recording"} 
-                    className="flex flex-row items-center gap-2" 
-                    onClick={() => startRecording()}>
-                    Start <VscDebugStart />
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+                {/* # Start Recording */}
+                <button
+                    disabled={recordingStatus === "recording"}
+                    style={{
+                        backgroundColor: recordingStatus === "recording" ? "#cccccc" : "#28a745",
+                        color: "white",
+                        padding: "10px 20px",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: recordingStatus === "recording" ? "not-allowed" : "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px"
+                    }}
+                    onClick={startRecording}>
+                    <VscDebugStart />
+                    <span>Start</span>
                 </button>
-                <button 
-                    disabled={recordingStatus !== "recording"} 
-                    className="flex flex-row items-center gap-2" 
-                    onClick={() => pauseRecording()}> 
+
+                {/* # Pause Recording */}
+                <button
+                    disabled={recordingStatus !== "recording"}
+                    style={{
+                        backgroundColor: recordingStatus === "recording" ? "#ffc107" : "#cccccc",
+                        color: "black",
+                        padding: "10px 20px",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: recordingStatus === "recording" ? "pointer" : "not-allowed",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px"
+                    }}
+                    onClick={pauseRecording}>
                     Pause
                 </button>
-                <button 
-                    disabled={recordingStatus !== "paused"} 
-                    className="flex flex-row items-center gap-2" 
-                    onClick={() => resumeRecording()}> 
+
+                {/* # Resume Recording */}
+                <button
+                    disabled={recordingStatus !== "paused"}
+                    style={{
+                        backgroundColor: recordingStatus === "paused" ? "#ffc107" : "#cccccc",
+                        color: "black",
+                        padding: "10px 20px",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: recordingStatus === "paused" ? "pointer" : "not-allowed",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px"
+                    }}
+                    onClick={resumeRecording}>
                     Resume
                 </button>
-                <button 
-                    disabled={!(recordingStatus === "recording" || recordingStatus === "paused")} 
-                    className="flex flex-row items-center gap-2" 
-                    onClick={() => stopRecording()}> 
-                    Stop <FaRegStopCircle />
+
+                {/* # Stop Recording */}
+                <button
+                    disabled={!(recordingStatus === "recording" || recordingStatus === "paused")}
+                    style={{
+                        backgroundColor: (recordingStatus === "recording" || recordingStatus === "paused") ? "#dc3545" : "#cccccc",
+                        color: "white",
+                        padding: "10px 20px",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: (recordingStatus === "recording" || recordingStatus === "paused") ? "pointer" : "not-allowed",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px"
+                    }}
+                    onClick={stopRecording}>
+                    <FaRegStopCircle />
+                    <span>Stop</span>
                 </button>
-                <button 
-                    disabled={recordingStatus !== "stopped"} 
-                    className="flex flex-row items-center gap-2" 
-                    onClick={() => uploadAudio()}> 
-                    Upload <MdOutlineStart />
+
+                {/* # Upload Audio */}
+                <button
+                    disabled={recordingStatus !== "stopped"}
+                    style={{
+                        backgroundColor: recordingStatus === "stopped" ? "#007bff" : "#cccccc",
+                        color: "white",
+                        padding: "10px 20px",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: recordingStatus === "stopped" ? "pointer" : "not-allowed",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px"
+                    }}
+                    onClick={uploadAudio}>
+                    <MdOutlineStart />
+                    <span>Upload</span>
                 </button>
-                <button 
-                    className="flex flex-row items-center gap-2" 
+
+                {/* # Restart Page */}
+                <button
+                    style={{
+                        backgroundColor: "#6c757d",
+                        color: "white",
+                        padding: "10px 20px",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px"
+                    }}
                     onClick={() => window.location.reload()}>
-                    Restart <VscDebugRestart />
+                    <VscDebugRestart />
+                    <span>Restart</span>
                 </button>
             </div>
 
-            {/* # Display results */}
-            <h2>Results</h2>
-            {transcription && <p><strong>Transcription:</strong> {transcription}</p>}
-            {sentiment && <p><strong>Sentiment:</strong> {sentiment}</p>}
-            {summary && <p><strong>Summary:</strong> {summary}</p>}
-            {namedEntities.length > 0 && (
-                <p><strong>Named Entities:</strong> {namedEntities.join(", ")}</p>
-            )}
+            {/* # Display results if available */}
+            {transcription || sentiment || summary || namedEntities.length > 0 ? (
+                <div style={{ marginTop: "20px", padding: "15px", border: "1px solid #ccc", borderRadius: "5px", backgroundColor: "white", boxShadow: "0px 2px 5px rgba(0,0,0,0.1)" }}>
+                    <h2 style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "10px" }}>Results</h2>
+                    {transcription && <p><strong>Transcription:</strong> {transcription}</p>}
+                    {sentiment && <p><strong>Sentiment:</strong> {sentiment}</p>}
+                    {summary && <p><strong>Summary:</strong> {summary}</p>}
+                    {namedEntities.length > 0 && (
+                        <p><strong>Named Entities:</strong> {namedEntities.join(", ")}</p>
+                    )}
+                </div>
+            ) : null}
         </div>
     );
 };

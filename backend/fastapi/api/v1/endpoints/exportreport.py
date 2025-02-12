@@ -129,3 +129,86 @@ async def send_report_cards(
             sent_reports.append({"guardian": guardian.email, "student": student_name})
 
     return {"message": "Report cards sent successfully", "sent_reports": sent_reports}
+
+
+@router.post("/{student_id}/send_report_card/")
+async def send_student_report_card(
+    student_id: int,
+    db: Session = Depends(get_sync_db),
+    teacher_id: int = Depends(get_current_user),
+):
+    """
+    Sends the latest report entry for a specific student to their guardians via email.
+    """
+    # Step 1: Get the student
+    student = db.query(Student).filter(Student.student_id == student_id).first()
+
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    # Step 2: Get the latest student report
+    latest_student_report = (
+        db.query(StudentReport)
+        .filter(StudentReport.student_id == student_id)
+        .order_by(desc(StudentReport.created_at))
+        .first()
+    )
+
+    if not latest_student_report:
+        raise HTTPException(status_code=404, detail="No student report found")
+
+    # Step 3: Get the latest report entry
+    latest_report_entry = (
+        db.query(ReportEntry)
+        .filter(ReportEntry.report_id == latest_student_report.report_id)
+        .order_by(desc(ReportEntry.created_at))
+        .first()
+    )
+
+    if not latest_report_entry:
+        raise HTTPException(status_code=404, detail="No report entry found")
+
+    # Step 4: Get the student's guardians
+    guardian_links = db.query(StudentGuardians).filter(StudentGuardians.student_id == student_id).all()
+
+    if not guardian_links:
+        raise HTTPException(status_code=404, detail="No guardians found")
+
+    guardians = [
+        db.query(Guardian).filter(Guardian.guardian_id == link.guardian_id).first()
+        for link in guardian_links
+    ]
+
+    if not guardians:
+        raise HTTPException(status_code=404, detail="No valid guardians found")
+
+    # Step 5: Generate an intuitive report card
+    student_name = f"{student.first_name} {student.last_name}"
+    course = db.query(Course).filter(Course.course_id == latest_report_entry.course_id).first()
+    teacher = db.query(Teacher).filter(Teacher.teacher_id == latest_report_entry.teacher_id).first()
+
+    course_name = course.course_name if course else "Unknown Course"
+    teacher_name = f"{teacher.first_name} {teacher.last_name}" if teacher else "Unknown Teacher"
+
+    report_card = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif;">
+        <h2 style="color: #2c3e50;">Teacher Feedback</h2>
+        <p><strong>Student:</strong> {student_name}</p>
+        <p><strong>Course:</strong> {course_name}</p>
+        <p><strong>Feedback:</strong> {latest_report_entry.comments}</p>
+        <br>
+        <p>Best regards,</p>
+        <p>{teacher_name}</p>
+    </body>
+    </html>
+    """
+
+    # Step 6: Send the email to all guardians
+    sent_reports = []
+    for guardian in guardians:
+        email_subject = f"Report Card for {student_name}"
+        send_email(guardian.email, email_subject, report_card)
+        sent_reports.append({"guardian": guardian.email, "student": student_name})
+
+    return {"message": "Report card sent successfully", "sent_reports": sent_reports}

@@ -17,7 +17,7 @@ const Sidebar = () => {
         { section: 'Reports', url: '/reports', icon: <HiOutlineDocumentReport /> },
         { section: 'Students', url: '/students', icon: <RiAccountCircleFill /> },
         // { section: 'Grades', url: '/grades', icon: <MdOutlineAccountBalance /> },
-        { section: 'Attendance', url: '/attendance', icon: <FaCalendarCheck /> },
+        { section: 'Calendar', url: '/calendar', icon: <FaCalendarCheck /> },
         { section: 'Import', url: '/import', icon: <LuImport /> },
     ];
 

@@ -315,3 +315,42 @@ async def get_latest_reports_by_course(
     ]
 
     return {"latest_reports": formatted_reports}
+
+
+@router.get("/metrics/")
+async def get_metrics_with_observations(
+    db: Session = Depends(get_sync_db)
+):
+    """
+    Retrieves all metrics along with their observation count.
+    """
+
+    # Query to get metrics with observation count
+    metrics_data = (
+        db.query(
+            ObservationMetric.metric_id,
+            ObservationMetric.metric_name,
+            ObservationMetric.description,
+            func.count(Observation.observation_id).label("num_observations")
+        )
+        .outerjoin(Observation, ObservationMetric.metric_id == Observation.metric_id)
+        .group_by(ObservationMetric.metric_id, ObservationMetric.metric_name, ObservationMetric.description)
+        .all()
+    )
+
+    if not metrics_data:
+        raise HTTPException(status_code=404, detail="No metrics found")
+
+    # Format response
+    formatted_metrics = [
+        {
+            "metric_id": metric.metric_id,
+            "metric_name": metric.metric_name,
+            "description": metric.description,
+            "num_observations": metric.num_observations
+        }
+        for metric in metrics_data
+    ]
+
+    return {"metrics": formatted_metrics}
+

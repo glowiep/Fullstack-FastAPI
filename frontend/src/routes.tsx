@@ -8,8 +8,7 @@ import BehaviorsSection from './sections/Behaviors';
 import ReportsSection from './sections/Reports';
 import ImportSection from './sections/Import';
 import StudentsSection from './sections/Students';
-import CoursesSection from './sections/Courses';
-import AttendanceSection from './sections/Attendance';
+import CalendarSection from './sections/Calendar';
 import App from './App';
 
 const router = createBrowserRouter([
@@ -26,8 +25,7 @@ const router = createBrowserRouter([
   { path: '/behaviors', element: <BehaviorsSection /> },
   { path: '/reports', element: <ReportsSection /> },
   { path: '/students', element: <StudentsSection /> },
-  { path: '/courses', element: <CoursesSection /> },
-  { path: '/attendance', element: <AttendanceSection /> },
+  { path: '/calendar', element: <CalendarSection /> },
   { path: '/import', element: <ImportSection /> },
 
   // Catch-all route to redirect unknown paths to root

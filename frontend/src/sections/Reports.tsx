@@ -80,13 +80,15 @@ const ReportsSection = () => {
                     </select>
                 </div>
 
-                <button
-                    onClick={sendReportCards}
-                    className={`px-4 py-2 rounded mb-4 mt-4 transition-colors duration-300 ${buttonEnabled ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
-                    disabled={!buttonEnabled}
-                >
-                    {buttonText}
-                </button>
+                <div className="flex flex-row justify-center">
+                    <button
+                        onClick={sendReportCards}
+                        className={`px-4 py-2 rounded mb-4 mt-4 transition-colors duration-300 ${buttonEnabled ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+                        disabled={!buttonEnabled}
+                    >
+                        {buttonText}
+                    </button>
+                </div>
 
                 {status && <p className="text-red-600">{status}</p>}
                 {sentReports.length > 0 && (

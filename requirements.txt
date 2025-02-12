@@ -1,4 +1,4 @@
-trio
+sotrio
 psycopg2-binary
 python-dotenv
 databases[asyncpg]
@@ -10,3 +10,6 @@ itsdangerous
 pytest
 pydantic>=2.7.0
 pydantic-settings
+python-multipart
+transformers
+pydub

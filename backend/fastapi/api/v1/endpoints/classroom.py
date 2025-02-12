@@ -71,8 +71,8 @@ async def get_students_by_course(
 
     return {"course_id": course_id, "students": students_list}
 
-# Gets all observations corresponding to the teacher logged in
-@router.get("/observations/")
+# Gets all observations_ids corresponding to the teacher logged in
+@router.get("/observation/")
 async def get_observations_for_teacher(
     teacher_id: int = Depends(get_current_user), 
     db: Session = Depends(get_sync_db)
@@ -83,6 +83,52 @@ async def get_observations_for_teacher(
     observation_ids = [obs.observation_id for obs in observations] if observations else []
 
     return {"observations": observation_ids}
+
+
+@router.get("/observations_data/")
+async def get_observations_for_teacher(
+    teacher_id: int = Depends(get_current_user), 
+    db: Session = Depends(get_sync_db)
+):
+    """
+    Fetches all observations for the authenticated teacher along with
+    - observation_id
+    - observation_text
+    - created_at
+    - metric_name (from Metric table)
+    - student first_name & last name (from Student table)
+    """
+
+    # Fetch observations linked to the authenticated teacher
+    observations = (
+        db.query(
+            Observation.observation_id,
+            Observation.observation_text,
+            Observation.created_at,
+            ObservationMetric.metric_name,
+            Student.first_name,
+            Student.last_name
+        )
+        .join(ObservationMetric, Observation.metric_id == ObservationMetric.metric_id)  # Join with Metric table
+        .join(Student, Observation.student_id == Student.student_id)  # Join with Student table
+        .filter(Observation.teacher_id == teacher_id)
+        .all()
+    )
+
+    # Convert result to a list of dictionaries
+    formatted_observations = [
+        {
+            "observation_id": obs.observation_id,
+            "observation_text": obs.observation_text,
+            "created_at": obs.created_at,
+            "metric_name": obs.metric_name,
+            "student_name": f"{obs.first_name} {obs.last_name}"
+        }
+        for obs in observations
+    ]
+
+    return {"observations": formatted_observations}
+
 
 # Creates an observation ** will have to add an additional rating system, rather than only text
 @router.post("/observations/")

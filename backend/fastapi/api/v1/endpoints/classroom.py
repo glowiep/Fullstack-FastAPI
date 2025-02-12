@@ -3,12 +3,16 @@ from sqlalchemy.orm import Session
 from backend.fastapi.dependencies.database import get_sync_db, Base
 from backend.fastapi.schemas.schemas import ObservationCreate, ObservationSchema, ObservationUpdate
 
+from sqlalchemy import desc, func
+
 Teacher = Base.classes.teachers  
 Observation = Base.classes.observations
 Student = Base.classes.students
 Course = Base.classes.courses
 StudentsCourses = Base.classes.student_courses
 ObservationMetric = Base.classes.observation_metrics
+ReportEntry = Base.classes.report_entries
+StudentReport = Base.classes.student_reports
 
 
 
@@ -71,8 +75,8 @@ async def get_students_by_course(
 
     return {"course_id": course_id, "students": students_list}
 
-# Gets all observations corresponding to the teacher logged in
-@router.get("/observations/")
+# Gets all observations_ids corresponding to the teacher logged in
+@router.get("/observation/")
 async def get_observations_for_teacher(
     teacher_id: int = Depends(get_current_user), 
     db: Session = Depends(get_sync_db)
@@ -83,6 +87,52 @@ async def get_observations_for_teacher(
     observation_ids = [obs.observation_id for obs in observations] if observations else []
 
     return {"observations": observation_ids}
+
+
+@router.get("/observations_data/")
+async def get_observations_for_teacher(
+    teacher_id: int = Depends(get_current_user), 
+    db: Session = Depends(get_sync_db)
+):
+    """
+    Fetches all observations for the authenticated teacher along with
+    - observation_id
+    - observation_text
+    - created_at
+    - metric_name (from Metric table)
+    - student first_name & last name (from Student table)
+    """
+
+    # Fetch observations linked to the authenticated teacher
+    observations = (
+        db.query(
+            Observation.observation_id,
+            Observation.observation_text,
+            Observation.created_at,
+            ObservationMetric.metric_name,
+            Student.first_name,
+            Student.last_name
+        )
+        .join(ObservationMetric, Observation.metric_id == ObservationMetric.metric_id)  # Join with Metric table
+        .join(Student, Observation.student_id == Student.student_id)  # Join with Student table
+        .filter(Observation.teacher_id == teacher_id)
+        .all()
+    )
+
+    # Convert result to a list of dictionaries
+    formatted_observations = [
+        {
+            "observation_id": obs.observation_id,
+            "observation_text": obs.observation_text,
+            "created_at": obs.created_at,
+            "metric_name": obs.metric_name,
+            "student_name": f"{obs.first_name} {obs.last_name}"
+        }
+        for obs in observations
+    ]
+
+    return {"observations": formatted_observations}
+
 
 # Creates an observation ** will have to add an additional rating system, rather than only text
 @router.post("/observations/")
@@ -201,3 +251,106 @@ async def create_observation(
             "course_id": new_observation.course_id
         }
     }
+
+
+@router.get("/{course_id}/reports/")
+async def get_latest_reports_by_course(
+    course_id: int,
+    db: Session = Depends(get_sync_db)
+):
+    """
+    Retrieves the latest report entry for each student in a given course.
+    """
+
+    # Subquery to get the latest report_id for each student in the given course
+    latest_reports_subquery = (
+        db.query(
+            StudentReport.student_id,
+            func.max(StudentReport.created_at).label("latest_created_at")
+        )
+        .join(ReportEntry, StudentReport.report_id == ReportEntry.report_id)
+        .filter(ReportEntry.course_id == course_id)
+        .group_by(StudentReport.student_id)
+        .subquery()
+    )
+
+    # Query to get the latest report entries using the subquery
+    latest_reports = (
+        db.query(
+            StudentReport.report_id,
+            StudentReport.student_id,
+            Student.first_name,
+            Student.last_name,
+            ReportEntry.course_id,
+            Course.course_name,
+            ReportEntry.comments.label("latest_feedback"),
+            ReportEntry.created_at
+        )
+        .join(latest_reports_subquery, 
+              (StudentReport.student_id == latest_reports_subquery.c.student_id) &
+              (StudentReport.created_at == latest_reports_subquery.c.latest_created_at))
+        .join(Student, Student.student_id == StudentReport.student_id)
+        .join(ReportEntry, StudentReport.report_id == ReportEntry.report_id)
+        .join(Course, ReportEntry.course_id == Course.course_id)
+        .filter(ReportEntry.course_id == course_id)
+        .order_by(desc(ReportEntry.created_at))
+        .all()
+    )
+
+    if not latest_reports:
+        raise HTTPException(status_code=404, detail="No reports found for this course")
+
+    # Format response
+    formatted_reports = [
+        {
+            "report_id": report.report_id,
+            "student_id": report.student_id,
+            "student_name": f"{report.first_name} {report.last_name}",
+            "course_id": report.course_id,
+            "course_name": report.course_name,
+            "latest_feedback": report.latest_feedback,
+            "created_at": report.created_at
+        }
+        for report in latest_reports
+    ]
+
+    return {"latest_reports": formatted_reports}
+
+
+@router.get("/metrics/")
+async def get_metrics_with_observations(
+    db: Session = Depends(get_sync_db)
+):
+    """
+    Retrieves all metrics along with their observation count.
+    """
+
+    # Query to get metrics with observation count
+    metrics_data = (
+        db.query(
+            ObservationMetric.metric_id,
+            ObservationMetric.metric_name,
+            ObservationMetric.description,
+            func.count(Observation.observation_id).label("num_observations")
+        )
+        .outerjoin(Observation, ObservationMetric.metric_id == Observation.metric_id)
+        .group_by(ObservationMetric.metric_id, ObservationMetric.metric_name, ObservationMetric.description)
+        .all()
+    )
+
+    if not metrics_data:
+        raise HTTPException(status_code=404, detail="No metrics found")
+
+    # Format response
+    formatted_metrics = [
+        {
+            "metric_id": metric.metric_id,
+            "metric_name": metric.metric_name,
+            "description": metric.description,
+            "num_observations": metric.num_observations
+        }
+        for metric in metrics_data
+    ]
+
+    return {"metrics": formatted_metrics}
+

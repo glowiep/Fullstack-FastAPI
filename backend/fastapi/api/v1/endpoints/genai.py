@@ -109,8 +109,8 @@ def generate_summary_report(observations: list) -> dict:
         response = co.chat(
             model="command-r",  # Use the correct Cohere model
             message=f"Summarize the following student observations and analyze the progress over time. "
-                    f"Provide a constructive critique with an estimated mark (0-100) at the end of the summary. "
-                    f"Consider the improvements over time. You are a teacher writing a report for parents:\n{combined_text}",
+                    f"Provide a constructive critique with an estimated mark (0-100) at the end of the summary."
+                    f"Consider the improvements over time. You are a teacher writing feedback for parents:\n{combined_text}, without referring to the student as 'A' or 'X.' Keep the language personal.",
             temperature=0.7
         )
         result = response.text.strip()

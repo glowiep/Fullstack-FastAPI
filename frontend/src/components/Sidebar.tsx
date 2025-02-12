@@ -1,6 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import '../App.css';
-import { IoBookSharp } from "react-icons/io5";
 import { FaCalendarCheck } from "react-icons/fa";
 import { RiAccountCircleFill } from "react-icons/ri";
 // import { MdOutlineAccountBalance } from "react-icons/md";
@@ -17,7 +16,6 @@ const Sidebar = () => {
         { section: 'Behaviors', url: '/behaviors', icon: <TbReportSearch/> },
         { section: 'Reports', url: '/reports', icon: <HiOutlineDocumentReport /> },
         { section: 'Students', url: '/students', icon: <RiAccountCircleFill /> },
-        { section: 'Courses', url: '/courses', icon: <IoBookSharp /> },
         // { section: 'Grades', url: '/grades', icon: <MdOutlineAccountBalance /> },
         { section: 'Attendance', url: '/attendance', icon: <FaCalendarCheck /> },
         { section: 'Import', url: '/import', icon: <LuImport /> },

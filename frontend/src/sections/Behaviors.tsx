@@ -4,6 +4,7 @@ import Modal from '../components/Modal';
 import api from '../api/axios';
 
 import Sidebar from "../components/Sidebar";
+import BehaviorTrackingTable from '../components/BehaviorTrackingTable';
 
 const BehaviorsSection = () => {
     const [behaviorInput, setBehaviorInput] = useState("");
@@ -73,6 +74,7 @@ const BehaviorsSection = () => {
                         <FaMagic />
                     </button>
                 </div>
+                <BehaviorTrackingTable />
             </div>
         </div>
     )

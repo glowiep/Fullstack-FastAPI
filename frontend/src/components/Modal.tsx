@@ -51,7 +51,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, title, description, onConfirm 
               </div>
               <div className="ml-4 text-left">
                 <h3 className="text-base font-semibold text-gray-900">{title || "Deactivate account"}</h3>
-                <p className="mt-2 text-sm text-gray-500">{description || "Are you sure you want to deactivate your account? This action cannot be undone."}</p>
+                <p className="mt-2 text-sm text-gray-500">{description || "Are you sure you want to add this behavior?"}</p>
               </div>
             </div>
           </div>

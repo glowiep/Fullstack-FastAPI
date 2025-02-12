@@ -50,8 +50,8 @@ const BehaviorsSection = () => {
     return (
         <div className="flex w-screen h-screen">
             <Sidebar />
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="AI Recommended Behaviors" description="test" onConfirm={handleSaveBehavior} />
-            <div className="flex flex-col bg-gray-100 w-full">
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="AI Recommended Behaviors" onConfirm={handleSaveBehavior} />
+            <div className="flex flex-col bg-gray-100 w-full items-center">
                 <h1>Behavior Tracking</h1>
                 <div className="flex flex-row p-4 gap-2">
                     <input placeholder="Enter behavior" 
@@ -63,14 +63,13 @@ const BehaviorsSection = () => {
                     <div className="">
                         <button onClick={handleGetRecommendedBehavior} className="flex flex-row items-center justify-center gap-2">
                             Add Behaviors
-                            <FaMagic />
                         </button>
                     </div>
                     {recommendedBehavior}
                 </div>
-                <div className="p-4">
+                <div className="p-2">
                     <button onClick={() => setShowModal(!showModal)} className="flex flex-row items-center justify-center gap-2">
-                        AI recommended Behaviors
+                        AI Recommended Behaviors
                         <FaMagic />
                     </button>
                 </div>

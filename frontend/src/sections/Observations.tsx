@@ -9,9 +9,9 @@ const ObservationsSection = () => {
     const [observations, setObservations] = useState(["inital observation", "another initial observation"]);
 
     const handleGetObservations = async () => {
-        // Fetch teacher emails from the backend - see @router.get("/observations/") in classroom.py
+        // Fetch teacher emails from the backend - see @router.get("/observation/") in classroom.py
         try {
-            const response = await api.get('/observations');
+            const response = await api.get('/observation');
             setObservations(response.data.observations || ["No observations found"]);  // Right now the response doesnt return what we need so it returns the default "No observations found"
         } catch (error) {
             console.error('Error fetching observations:', error);

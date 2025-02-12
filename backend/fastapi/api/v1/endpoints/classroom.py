@@ -3,12 +3,16 @@ from sqlalchemy.orm import Session
 from backend.fastapi.dependencies.database import get_sync_db, Base
 from backend.fastapi.schemas.schemas import ObservationCreate, ObservationSchema, ObservationUpdate
 
+from sqlalchemy import desc, func
+
 Teacher = Base.classes.teachers  
 Observation = Base.classes.observations
 Student = Base.classes.students
 Course = Base.classes.courses
 StudentsCourses = Base.classes.student_courses
 ObservationMetric = Base.classes.observation_metrics
+ReportEntry = Base.classes.report_entries
+StudentReport = Base.classes.student_reports
 
 
 
@@ -247,3 +251,67 @@ async def create_observation(
             "course_id": new_observation.course_id
         }
     }
+
+
+@router.get("/{course_id}/reports/")
+async def get_latest_reports_by_course(
+    course_id: int,
+    db: Session = Depends(get_sync_db)
+):
+    """
+    Retrieves the latest report entry for each student in a given course.
+    """
+
+    # Subquery to get the latest report_id for each student in the given course
+    latest_reports_subquery = (
+        db.query(
+            StudentReport.student_id,
+            func.max(StudentReport.created_at).label("latest_created_at")
+        )
+        .join(ReportEntry, StudentReport.report_id == ReportEntry.report_id)
+        .filter(ReportEntry.course_id == course_id)
+        .group_by(StudentReport.student_id)
+        .subquery()
+    )
+
+    # Query to get the latest report entries using the subquery
+    latest_reports = (
+        db.query(
+            StudentReport.report_id,
+            StudentReport.student_id,
+            Student.first_name,
+            Student.last_name,
+            ReportEntry.course_id,
+            Course.course_name,
+            ReportEntry.comments.label("latest_feedback"),
+            ReportEntry.created_at
+        )
+        .join(latest_reports_subquery, 
+              (StudentReport.student_id == latest_reports_subquery.c.student_id) &
+              (StudentReport.created_at == latest_reports_subquery.c.latest_created_at))
+        .join(Student, Student.student_id == StudentReport.student_id)
+        .join(ReportEntry, StudentReport.report_id == ReportEntry.report_id)
+        .join(Course, ReportEntry.course_id == Course.course_id)
+        .filter(ReportEntry.course_id == course_id)
+        .order_by(desc(ReportEntry.created_at))
+        .all()
+    )
+
+    if not latest_reports:
+        raise HTTPException(status_code=404, detail="No reports found for this course")
+
+    # Format response
+    formatted_reports = [
+        {
+            "report_id": report.report_id,
+            "student_id": report.student_id,
+            "student_name": f"{report.first_name} {report.last_name}",
+            "course_id": report.course_id,
+            "course_name": report.course_name,
+            "latest_feedback": report.latest_feedback,
+            "created_at": report.created_at
+        }
+        for report in latest_reports
+    ]
+
+    return {"latest_reports": formatted_reports}

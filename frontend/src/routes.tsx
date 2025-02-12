@@ -8,7 +8,6 @@ import BehaviorsSection from './sections/Behaviors';
 import ReportsSection from './sections/Reports';
 import ImportSection from './sections/Import';
 import StudentsSection from './sections/Students';
-import CoursesSection from './sections/Courses';
 import AttendanceSection from './sections/Attendance';
 import App from './App';
 
@@ -26,7 +25,6 @@ const router = createBrowserRouter([
   { path: '/behaviors', element: <BehaviorsSection /> },
   { path: '/reports', element: <ReportsSection /> },
   { path: '/students', element: <StudentsSection /> },
-  { path: '/courses', element: <CoursesSection /> },
   { path: '/attendance', element: <AttendanceSection /> },
   { path: '/import', element: <ImportSection /> },
 

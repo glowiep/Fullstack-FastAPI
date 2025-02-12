@@ -124,7 +124,7 @@ async def send_report_cards(
 
         # Step 6: Send the email to all guardians
         for guardian in guardians:
-            email_subject = f"Report Card for {student_name}"
+            email_subject = f"Feedback for {student_name}"
             send_email(guardian.email, email_subject, report_card)
             sent_reports.append({"guardian": guardian.email, "student": student_name})
 
@@ -207,7 +207,7 @@ async def send_student_report_card(
     # Step 6: Send the email to all guardians
     sent_reports = []
     for guardian in guardians:
-        email_subject = f"Report Card for {student_name}"
+        email_subject = f"Feedback for {student_name}"
         send_email(guardian.email, email_subject, report_card)
         sent_reports.append({"guardian": guardian.email, "student": student_name})
 

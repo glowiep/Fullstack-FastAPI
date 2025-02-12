@@ -52,10 +52,10 @@ const Home = () => {
 
                 {/* Operations */}
                 <div className="bg-white shadow rounded-lg p-4">
-                  <h2 className="text-xl font-semibold mb-4">Operations</h2>
+                  <h2 className="text-xl font-semibold mb-4">Calendar</h2>
                   <div className="flex justify-between items-center">
                     <span className="text-xl font-semibold">8</span>
-                    <span className="badge badge-success">All Good</span>
+                    <span className="badge badge-success">Nothing Scheduled</span>
                   </div>
                 </div>
 

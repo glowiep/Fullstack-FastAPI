@@ -1,4 +1,3 @@
-import React from 'react';
 import Sidebar from "../components/Sidebar";
 import ConnectGoogle from "../components/ConnectGoogle";
 import ConnectOutlook from "../components/ConnectOutlook";

@@ -1,10 +1,24 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
+import { FaDownload } from "react-icons/fa";
 
 const ReportsSection = () => {
     const [status, setStatus] = useState<string | null>(null);
     const [sentReports, setSentReports] = useState<any[]>([]);
-    const [generatedReports, setGeneratedReports] = useState<any[]>([]); // New state for generated reports
+    const [generatedReports, setGeneratedReports] = useState<any[]>([
+        { id: 1, student: "Timmy Turner", class: "Grade 6 Math", date: "2025-02-13" },
+        { id: 2, student: "Beatrice Beauregard", class: "Grade 5 Math", date: "2025-02-12" },
+        { id: 3, student: "Chatty Cathee", class: "Grade 4 Math", date: "2025-02-03" },
+        { id: 4, student: "Dora the Explorer", class: "Grade 6 Math", date: "2025-01-04" },
+        { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2025-01-05" },
+        { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2025-01-05" },
+        { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+        { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+        { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+        { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+        { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+        { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+    ]); // New state for generated reports
     const [selectedClass, setSelectedClass] = useState("");
     const [selectedStudent, setSelectedStudent] = useState("");
     const [buttonText, setButtonText] = useState("Select Class & Student");
@@ -36,8 +50,18 @@ const ReportsSection = () => {
                 setSentReports(data.sent_reports);
                 // Simulate fetching generated reports (replace with actual API call)
                 setGeneratedReports([
-                    { id: 1, student: "Timmy Turner", class: "Grade 6 Math", date: "2023-10-01" },
-                    { id: 2, student: "Beatrice Beauregard", class: "Grade 5 Math", date: "2023-10-02" },
+                    { id: 1, student: "Timmy Turner", class: "Grade 6 Math", date: "2025-02-13" },
+                    { id: 2, student: "Beatrice Beauregard", class: "Grade 5 Math", date: "2025-02-12" },
+                    { id: 3, student: "Chatty Cathee", class: "Grade 4 Math", date: "2025-02-03" },
+                    { id: 4, student: "Dora the Explorer", class: "Grade 6 Math", date: "2025-01-04" },
+                    { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2025-01-05" },
+                    { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2025-01-05" },
+                    { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+                    { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+                    { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+                    { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+                    { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
+                    { id: 5, student: "Ellie Elison", class: "Grade 5 Math", date: "2024-01-05" },
                 ]);
             } else {
                 setStatus(`Error: ${data.detail}`);
@@ -114,8 +138,8 @@ const ReportsSection = () => {
 
                 {/* New Table for Generated Reports */}
                 {generatedReports.length > 0 && (
-                    <div className="mt-8">
-                        <h2 className="text-xl font-semibold mb-2">Generated Reports</h2>
+                    <div className="mt-2 overflow-y-auto">
+                        <h2 className="text-xl font-semibold mb-2 border-t border-b border-gray-300 rounded">Generated Reports</h2>
                         <table className="w-full border-collapse border border-gray-300">
                             <thead>
                                 <tr className="bg-gray-200">
@@ -127,7 +151,12 @@ const ReportsSection = () => {
                             <tbody>
                                 {generatedReports.map((report) => (
                                     <tr key={report.id} className="hover:bg-gray-50">
-                                        <td className="border border-gray-300 p-2">{report.student}</td>
+                                        <td className="border border-gray-200 p-2 flex flex-row items-center gap-2 hover:cursor-pointer hover:bg-white">
+                                            {report.student}
+                                            <div className="hover:scale-120 transition-transform">
+                                                <FaDownload />
+                                            </div>
+                                        </td>
                                         <td className="border border-gray-300 p-2">{report.class}</td>
                                         <td className="border border-gray-300 p-2">{report.date}</td>
                                     </tr>

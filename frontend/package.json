@@ -27,6 +27,7 @@
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.1.5",
     "react-toastify": "^11.0.3",
+    "react-use-audio-recorder": "^0.4.1",
     "tailwindcss": "^4.0.4"
   },
   "devDependencies": {

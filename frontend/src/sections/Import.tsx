@@ -71,100 +71,102 @@ const ImportPage: React.FC<ImportPageProps> = () => {
 
   return (
     <div className="flex w-screen h-screen">
-             <Sidebar />
-           
-    <Container maxWidth="md">
-      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
-        <Typography variant="h3" gutterBottom>
-          Import Student Data 
-        </Typography>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 3 }}>
-          {/* Grade Selection */}
-          <FormControl fullWidth>
-            <InputLabel>Select Grade*</InputLabel>
-            <Select
-              value={selectedGrade}
-              label="Select Grade"
-              onChange={handleGradeChange}
-            >
-              {grades.map((grade) => (
-                <MenuItem key={grade} value={grade}>
-                  {grade}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Class Selection */}
-          <FormControl fullWidth>
-            <InputLabel>Select Class*</InputLabel>
-            <Select
-              value={selectedClass}
-              label="Select Class"
-              onChange={handleClassChange}
-            >
-              {classes.map((className) => (
-                <MenuItem key={className} value={className}>
-                  Class {className}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Student Selection */}
-          <FormControl fullWidth>
-            <InputLabel>Select Student (Optional)</InputLabel>
-            <Select
-              value={selectedStudent}
-              label="Select Student"
-              onChange={handleStudentChange}
-            >
-              {students.map((student) => (
-                <MenuItem key={student} value={student}>
-                  {student}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* File Upload */}
-          <Box
-            sx={{
-              border: '2px dashed #ccc',
-              borderRadius: 2,
-              p: 3,
-              textAlign: 'center',
-              cursor: 'pointer',
-              '&:hover': {
-                backgroundColor: '#f5f5f5'
-              }
-            }}
-          >
-            <input
-              accept=".xlsx,.xls,.csv"
-              style={{ display: 'none' }}
-              id="file-upload"
-              type="file"
-              onChange={handleFileUpload}
-            />
-            <label htmlFor="file-upload">
-              <Button
-                component="span"
-                variant="outlined"
-                startIcon={<FiUpload />}
-                sx={{ mb: 2 }}
-              >
-                Upload File
-              </Button>
-              <Typography variant="body2" color="textSecondary">
-                Drag and drop or click to upload Excel or CSV files
+        <Sidebar />
+        <div className="flex flex-col bg-gray-100 w-full items-center">
+          <h1>Import</h1>
+          <Container maxWidth="md">
+            <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
+              <Typography variant="h4" gutterBottom>
+                Upload Student Data 
               </Typography>
-            </label>
-          </Box>
-        </Box>
-      </Paper>
-    </Container>
+
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 3 }}>
+                {/* Grade Selection */}
+                <FormControl fullWidth>
+                  <InputLabel>Select Grade*</InputLabel>
+                  <Select
+                    value={selectedGrade}
+                    label="Select Grade"
+                    onChange={handleGradeChange}
+                  >
+                    {grades.map((grade) => (
+                      <MenuItem key={grade} value={grade}>
+                        {grade}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                {/* Class Selection */}
+                <FormControl fullWidth>
+                  <InputLabel>Select Class*</InputLabel>
+                  <Select
+                    value={selectedClass}
+                    label="Select Class"
+                    onChange={handleClassChange}
+                  >
+                    {classes.map((className) => (
+                      <MenuItem key={className} value={className}>
+                        Class {className}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                {/* Student Selection */}
+                <FormControl fullWidth>
+                  <InputLabel>Select Student (Optional)</InputLabel>
+                  <Select
+                    value={selectedStudent}
+                    label="Select Student"
+                    onChange={handleStudentChange}
+                  >
+                    {students.map((student) => (
+                      <MenuItem key={student} value={student}>
+                        {student}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                {/* File Upload */}
+                <Box
+                  sx={{
+                    border: '2px dashed #ccc',
+                    borderRadius: 2,
+                    p: 3,
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5'
+                    }
+                  }}
+                >
+                  <input
+                    accept=".xlsx,.xls,.csv"
+                    style={{ display: 'none' }}
+                    id="file-upload"
+                    type="file"
+                    onChange={handleFileUpload}
+                  />
+                  <label htmlFor="file-upload">
+                    <Button
+                      component="span"
+                      variant="outlined"
+                      startIcon={<FiUpload />}
+                      sx={{ mb: 2 }}
+                    >
+                      Upload File
+                    </Button>
+                    <Typography variant="body2" color="textSecondary">
+                      Drag and drop or click to upload Excel or CSV files
+                    </Typography>
+                  </label>
+                </Box>
+              </Box>
+            </Paper>
+          </Container>
+        </div>
     </div>
   );
 };

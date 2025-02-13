@@ -61,18 +61,18 @@ const BehaviorsSection = () => {
                         value={behaviorInput} 
                         onChange={(e) => setBehaviorInput(e.target.value)}
                     />
-                    <div className="">
+                    <div className="p-2">
                         <button onClick={handleGetRecommendedBehavior} className="flex flex-row items-center justify-center gap-2">
                             Add Behaviors
                         </button>
                     </div>
                     {recommendedBehavior}
-                </div>
-                <div className="p-2">
-                    <button onClick={() => setShowModal(!showModal)} className="flex flex-row items-center justify-center gap-2">
-                        AI Recommended Behaviors
-                        <FaMagic />
-                    </button>
+                    <div className="pt-2">
+                        <button onClick={() => setShowModal(!showModal)} className="flex flex-row items-center justify-center gap-2">
+                            AI Recommended Behaviors
+                            <FaMagic />
+                        </button>
+                    </div>
                 </div>
                 <BehaviorTrackingTable />
             </div>

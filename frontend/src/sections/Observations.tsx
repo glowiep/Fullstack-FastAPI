@@ -110,7 +110,7 @@ const ObservationsSection = () => {
                 <h1 className="text-4xl font-bold text-center mb-6">Observations</h1>
                 <div className="flex flex-row">
                     {/* Left-side Form */}
-                    <div className="w-1/3 bg-white shadow-lg p-6 rounded-lg border border-gray-300">
+                    <div className="w-1/3 bg-white h-fit shadow-lg p-6 rounded-lg border border-gray-300">
                         <h2 className="text-2xl font-bold mb-6 text-center">Add Observation</h2>
                         <label className="block mb-2 font-medium">Select Student:</label>
                         <select

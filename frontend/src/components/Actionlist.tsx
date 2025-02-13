@@ -20,7 +20,7 @@ const ActionList = () => {
         <div className="w-full flex flex-col items-center">
             <h2><strong>Action Required</strong></h2>
             <div className="flex flex-row mb-2">
-                <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Enter new action" className="border rounded border-gray-300" />
+                <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Enter Reminder" className="border rounded border-gray-300" />
                 <button onClick={addItem} style={{ backgroundColor: "green", color: "white", marginLeft: "5px", padding: "3px 8px", fontSize: "12px" }}>Add</button>
             </div>
             <ul style={{ marginTop: "10px", listStyleType: "disc", paddingLeft: "20px" }}>

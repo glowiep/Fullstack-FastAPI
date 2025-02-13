@@ -33,30 +33,21 @@ const Home = () => {
 
                         {/* Tracking Sections */}
                         <div className="col-span-2 grid grid-cols-2 gap-4">
-                            {/* Attendance */}
-                            <div className="bg-white shadow rounded-lg p-4">
-                                <h2 className="text-xl font-semibold mb-4">Attendance</h2>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-xl font-semibold">8</span>
-                                    <span className="badge badge-warning">Needs Required</span>
-                                </div>
-                            </div>
-
                             {/* Observations */}
                             <div className="bg-white shadow rounded-lg p-4">
                                 <h2 className="text-xl font-semibold mb-4">Observations</h2>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-xl font-semibold">8</span>
-                                    <span className="badge badge-success">All Good</span>
+                                    <span className="text-xl font-semibold">204</span>
+                                    <span className="badge badge-success">Up-to-date</span>
                                 </div>
                             </div>
 
-                            {/* Operations */}
+                            {/* Behaviors */}
                             <div className="bg-white shadow rounded-lg p-4">
-                                <h2 className="text-xl font-semibold mb-4">Calendar</h2>
+                                <h2 className="text-xl font-semibold mb-4">Behaviors</h2>
                                 <div className="flex justify-between items-center">
                                     <span className="text-xl font-semibold">8</span>
-                                    <span className="badge badge-success">Nothing Scheduled</span>
+                                    <span className="badge badge-warning">Attention Required</span>
                                 </div>
                             </div>
 
@@ -64,8 +55,17 @@ const Home = () => {
                             <div className="bg-white shadow rounded-lg p-4">
                                 <h2 className="text-xl font-semibold mb-4">Reports</h2>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-xl font-semibold">6</span>
-                                    <span className="badge badge-warning">Needs Required</span>
+                                    <span className="text-xl font-semibold">36</span>
+                                    <span className="badge badge-warning">Attention Required</span>
+                                </div>
+                            </div>
+
+                            {/* Operations */}
+                            <div className="bg-white shadow rounded-lg p-4">
+                                <h2 className="text-xl font-semibold mb-4">Calendar</h2>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-xl font-semibold">0</span>
+                                    <span className="badge badge-success">Nothing Scheduled</span>
                                 </div>
                             </div>
                         </div>

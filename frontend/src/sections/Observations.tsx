@@ -148,7 +148,7 @@ const ObservationsSection = () => {
                         ></textarea>
 
                         <label className="block mb-2 font-medium">Upload File (Optional):</label>
-                        <input type="file" className="mb-4" onChange={handleFileChange} />
+                        <input type="file" className="text-gray-500 mb-4 p-2 border border-gray-300 rounded hover:cursor-pointer bg-gray-100 hover:bg-gray-200" onChange={handleFileChange} />
 
                         <button
                             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"

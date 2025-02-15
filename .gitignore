@@ -113,9 +113,9 @@ celerybeat.pid
 
 # Environments
 .env
-# .venv
-# env/
-# venv/
+.venv
+env/
+venv/
 # ENV/
 # env.bak/
 # venv.bak/
@@ -162,6 +162,5 @@ pip-selfcheck.json
 
 # Image files
 /tmp
-node_modules
 
 # End of https://www.toptal.com/developers/gitignore/api/python

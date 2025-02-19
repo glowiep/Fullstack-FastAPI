@@ -122,7 +122,7 @@ const RecordTranscribe = () => {
                         alignItems: "center",
                         gap: "5px"
                     }}
-                    onClick={stopRecording}>
+                    onClick={() => stopRecording()}>
                     <FaRegStopCircle />
                     <span>Stop</span>
                 </button>

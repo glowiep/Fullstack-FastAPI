@@ -13,6 +13,8 @@ StudentsCourses = Base.classes.student_courses
 ObservationMetric = Base.classes.observation_metrics
 ReportEntry = Base.classes.report_entries
 StudentReport = Base.classes.student_reports
+ObservationAttachment = Base.classes.observation_attachments
+
 
 
 
@@ -134,37 +136,62 @@ async def get_observations_for_teacher(
     return {"observations": formatted_observations}
 
 
-# Creates an observation ** will have to add an additional rating system, rather than only text
+from fastapi import File, UploadFile, Form
+
 @router.post("/observations/")
 async def create_observation(
-    observation_data: ObservationCreate,
+    student_id: int = Form(...),
+    course_id: int = Form(...),
+    metric_id: int = Form(...),
+    observation_text: str = Form(...),
+    file: UploadFile = File(None),  # Optional file upload
     teacher_id: int = Depends(get_current_user), 
     db: Session = Depends(get_sync_db)
 ):
     # Check if course exists
-    course = db.query(Course).filter(Course.course_id == observation_data.course_id).first()
+    course = db.query(Course).filter(Course.course_id == course_id).first()
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
 
     # Check if student exists
-    student = db.query(Student).filter(Student.student_id == observation_data.student_id).first()
+    student = db.query(Student).filter(Student.student_id == student_id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
     
     # Create a new Observation record
     new_observation = Observation(
         teacher_id=teacher_id,
-        course_id=observation_data.course_id,
-        student_id=observation_data.student_id,
-        metric_id = observation_data.metric_id,
-        observation_text= observation_data.observation_text
+        course_id=course_id,
+        student_id=student_id,
+        metric_id=metric_id,
+        observation_text=observation_text
     )
 
     db.add(new_observation)
     db.commit()
     db.refresh(new_observation)
 
-    return {"message": "Observation recorded", "observation_id": new_observation.observation_id}
+    # Save file if uploaded
+    if file:
+        file_location = f"uploads/{file.filename}"
+        with open(file_location, "wb") as f:
+            f.write(await file.read())
+
+        # Store file info in the database (assuming observation_attachments table exists)
+        attachment = ObservationAttachment(
+            observation_id=new_observation.observation_id,
+            file_path=file_location,
+            filename=file.filename
+        )
+        db.add(attachment)
+        db.commit()
+
+    return {
+        "message": "Observation recorded",
+        "observation_id": new_observation.observation_id,
+        "file_uploaded": file.filename if file else None
+    }
+
 
 
 
@@ -354,3 +381,7 @@ async def get_metrics_with_observations(
 
     return {"metrics": formatted_metrics}
 
+@router.get("/students/")
+async def get_students(db: Session = Depends(get_sync_db)):
+    students = db.query(Student).all()
+    return {"students": [{"student_id": s.student_id, "first_name": s.first_name, "last_name": s.last_name} for s in students]}

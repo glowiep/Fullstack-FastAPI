@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "react-use-audio-recorder": "^0.4.1"
+  }
+}

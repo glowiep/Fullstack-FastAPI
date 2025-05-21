@@ -37,7 +37,7 @@ const RecordTranscribe = () => {
         formData.append("file", new File([audioBlob], "audio.wav", { type: "audio/wav" }));
 
         try {
-            const response = await api.post("/api/v1/speech-to-text/upload-audio/", formData);
+            const response = await api.post("/v1/speech-to-text/upload-audio/", formData);
             setTranscription(response.data.transcription);
             setSentiment(response.data.sentiment);
             setSummary(response.data.summary);
